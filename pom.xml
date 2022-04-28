@@ -22,12 +22,10 @@
     <spring.boot.version>2.6.6</spring.boot.version>
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <maven.compiler.source>${java.version}</maven.compiler.source>
-
     <mvn-pmd-version>3.16.0</mvn-pmd-version>
     <mvn-checkstyle-version>3.1.2</mvn-checkstyle-version>
     <puppycrawl-checkstyle-version>8.3</puppycrawl-checkstyle-version>
-    <jjwt-version>0.11.2</jjwt-version>
-    <mapstruct.version>1.4.2.Final</mapstruct.version>
+    <open-api-version>1.6.7</open-api-version>
   </properties>
 
   <dependencies>
@@ -39,11 +37,6 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>de.codecentric</groupId>
-      <artifactId>spring-boot-admin-starter-client</artifactId>
-      <version>${spring.boot.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -63,22 +56,8 @@
       <artifactId>h2</artifactId>
       <scope>runtime</scope>
     </dependency>
-    <dependency>
-      <groupId>org.mapstruct</groupId>
-      <artifactId>mapstruct</artifactId>
-      <version>${mapstruct.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.mapstruct</groupId>
-      <artifactId>mapstruct-processor</artifactId>
-      <version>${mapstruct.version}</version>
-    </dependency>
 
     <!--
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-data-jdbc</artifactId>
-    </dependency>
     <dependency>
         <groupId>io.springfox</groupId>
         <artifactId>springfox-swagger2</artifactId>

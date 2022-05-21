@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -67,18 +66,21 @@
       <artifactId>springdoc-openapi-ui</artifactId>
       <version>${open-api-version}</version>
     </dependency>
-
+    <dependency>
+      <groupId>org.liquibase</groupId>
+      <artifactId>liquibase-core</artifactId>
+    </dependency>
     <!--
-    <dependency>
-      <groupId>io.springfox</groupId>
-      <artifactId>springfox-swagger2</artifactId>
-      <version>2.9.2</version>
-    </dependency>
-    <dependency>
-      <groupId>io.springfox</groupId>
-      <artifactId>springfox-swagger-ui</artifactId>
-      <version>2.9.2</version>
-    </dependency>
+      <dependency>
+        <groupId>io.springfox</groupId>
+        <artifactId>springfox-swagger2</artifactId>
+        <version>2.9.2</version>
+      </dependency>
+      <dependency>
+        <groupId>io.springfox</groupId>
+        <artifactId>springfox-swagger-ui</artifactId>
+        <version>2.9.2</version>
+      </dependency>
     -->
   </dependencies>
 
@@ -86,12 +88,27 @@
   <build>
     <finalName>${project.artifactId}</finalName>
 
+    <!--
+      <filters>
+        <filter>src/main/resources/liquibase.properties</filter>
+      </filters>
+    -->
+
     <pluginManagement>
       <plugins>
-
+        <!--=================================================================================================-->
         <plugin>
           <groupId>org.springframework.boot</groupId>
           <artifactId>spring-boot-maven-plugin</artifactId>
+          <configuration>
+            <excludes>
+              <exclude>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+              </exclude>
+            </excludes>
+            <includeSystemScope>true</includeSystemScope>
+          </configuration>
           <executions>
             <execution>
               <goals>
@@ -99,20 +116,32 @@
               </goals>
             </execution>
           </executions>
-          <configuration>
-            <includeSystemScope>true</includeSystemScope>
-          </configuration>
         </plugin>
-
-        <!--<plugin>-->
-        <!--<groupId>org.liquibase</groupId>-->
-        <!--<artifactId>liquibase-maven-plugin</artifactId>-->
-        <!--<version>4.0.0</version>-->
-        <!--<configuration>-->
-        <!--    <propertyFile>src/main/resources/liquibase.properties</propertyFile>-->
-        <!--</configuration>-->
-        <!--</plugin>-->
-
+        <!--=================================================================================================-->
+        <!--
+          <plugin>
+            <groupId> org.liquibase</groupId>
+            <artifactId>liquibase-maven-plugin</artifactId>
+            <version>4.3.5</version>
+            <configuration>
+              <propertyFile>src/main/resources/liquibase.properties</propertyFile>
+              <changeLogFile>${project.basedir}/src/main/resources/db/changelog-master.xml</changeLogFile>
+              <outputChangeLogFile>${project.basedir}/src/main/resources/${maven.build.timestamp}_changelog_out.xml</outputChangeLogFile>
+              <diffChangeLogFile>${project.basedir}/src/main/resources/${maven.build.timestamp}_changelog_dif.xml</diffChangeLogFile>
+              <driver>org.postgresql.Driver</driver>
+              <url>jdbc:postgresql://localhost:5432/link_shortener</url>
+              <defaultSchemaName>public</defaultSchemaName>
+              <username>admin</username>
+              <password>1234</password>
+              <referenceUrl>hibernate:spring:com.erensayar.linkShortener?dialect=org.hibernate.dialect.PostgreSQLDialect&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
+              <referenceDriver>liquibase.ext.hibernate.database.connection.HibernateDriver</referenceDriver>
+              <verbose>true</verbose>
+              <logging>debug</logging>
+              <contexts>!test</contexts>
+            </configuration>
+          </plugin>
+        -->
+        <!--=================================================================================================-->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-pmd-plugin</artifactId>
@@ -138,7 +167,7 @@
             </dependency>
           </dependencies>
         </plugin>
-
+        <!--=================================================================================================-->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-checkstyle-plugin</artifactId>
@@ -228,7 +257,8 @@
                   <!-- Checks for imports -->
                   <!-- See https://checkstyle.org/config_imports.html -->
                   <!--<module name="AvoidStarImport"/>-->
-                  <module name="IllegalImport"/> <!-- defaults to sun.* packages -->
+                  <module name="IllegalImport"/>
+                  <!-- defaults to sun.* packages -->
                   <module name="RedundantImport"/>
                   <module name="UnusedImports">
                     <property name="processJavadoc" value="false"/>
@@ -296,7 +326,7 @@
                   <!-- https://checkstyle.org/config_filters.html#SuppressionXpathFilter -->
                   <!-- <module name="SuppressionXpathFilter"> -->
                   <!--   <property name="file" value="${org.checkstyle.sun.suppressionxpathfilter.config}" -->
-                  <!--     default="checkstyle-xpath-suppressions.xml"/> -->
+                  <!-- default="checkstyle-xpath-suppressions.xml"/> -->
                   <!--   <property name="optional" value="true"/> -->
                   <!-- </module> -->
 
@@ -305,17 +335,6 @@
             </checkstyleRules>
           </configuration>
         </plugin>
-
-        <!--<plugin>-->
-        <!--<groupId>org.codehaus.mojo</groupId>-->
-        <!--<artifactId>versions-maven-plugin</artifactId>-->
-        <!--<version>2.7</version>-->
-        <!--<configuration>-->
-        <!--    <excludes>-->
-        <!--        <exclude>org.apache.commons:commons-collections4</exclude>-->
-        <!--    </excludes>-->
-        <!--</configuration>-->
-        <!--</plugin>-->
 
       </plugins>
     </pluginManagement>

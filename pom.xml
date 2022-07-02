@@ -20,7 +20,6 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>17</java.version>
-    <spring.boot.version>2.6.6</spring.boot.version>
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <mvn-pmd-version>3.16.0</mvn-pmd-version>
